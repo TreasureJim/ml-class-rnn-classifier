@@ -15,8 +15,6 @@ def load_and_concatenate_data(folder):
                 
                 # Convert to DataFrame
                 df = pd.DataFrame(data)
-
-                df.drop("Class", axis=1, inplace=True)
                 
                 # Add the 'd_class' column
                 df['d_class'] = "talal-" + filename[:-4].lower()
@@ -27,18 +25,13 @@ def load_and_concatenate_data(folder):
     # Concatenate all DataFrames in the list
     return pd.concat(dataframes, ignore_index=True)
 
-directories = ['test', 'train', 'valid']
+pik_types = ['test', 'train', 'valid']
 
-# Store concatenated DataFrames
-all_data = {}
-
-# Loop through each directory and concatenate data
-for directory in directories:
-    all_data[directory] = load_and_concatenate_data(directory)
-
-# Optionally, save the concatenated DataFrames to new .pkl files
-for directory, dataframe in all_data.items():
-    output_file = f"{directory}.pkl"
-    dataframe.to_pickle(output_file)
+for type in pik_types:
+    talal = pickle.load(open(f"./talal-clean/{type}.pkl", "rb"))
+    liam = pickle.load(open(f"./liam-clean/{type}.pkl", "rb"))
+    liam["d_class"] = "liam-" + liam["d_class"]
+    data = pd.concat([talal, liam])
+    pickle.dump(data, open(f"./{type}.pkl", "wb"))
 
 print("Data concatenation completed. Concatenated files are saved as .pkl.")
