@@ -1,3 +1,16 @@
-FROM tensorflow/tensorflow:latest-gpu-py3-jupyter
+# Use the official TensorFlow image as the base
+FROM tensorflow/tensorflow:latest-gpu-jupyter
 
-RUN pip install pandas numpy matplotlib scikit-learn
+# Set working directory
+WORKDIR /home/jovyvan/work
+
+# Copy your requirements file
+COPY requirements.txt .
+
+# Install additional dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 8888
+
+# Set the command to start Jupyter Notebook
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
