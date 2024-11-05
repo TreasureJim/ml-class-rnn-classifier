@@ -1,2 +1,3 @@
 keras-tuner
 seaborn
+scikit-learn
